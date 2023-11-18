@@ -1,3 +1,17 @@
-export const name = 'name';
+import dns from 'dns';
+import buffer from 'buffer';
+import os from 'os';
 
-console.log('name');
+const address = () => {};
+
+const mask = () => {};
+
+const version = () => {};
+
+const toBuffer = () => {};
+
+const isEqual = () => {};
+
+const isIP = () => {};
+
+const isIPv4 = () => {};
