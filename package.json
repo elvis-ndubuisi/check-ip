@@ -5,7 +5,9 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "tsup",
-		"type-check": "tsc"
+		"type-check": "tsc",
+		"dev": "vitest",
+		"test": "vitest run"
 	},
 	"keywords": [],
 	"author": "Elvis Ndubuisi Ike",
@@ -14,6 +16,7 @@
 		"@types/node": "^20.9.1",
 		"prettier": "^3.1.0",
 		"tsup": "^7.3.0",
-		"typescript": "^5.2.2"
+		"typescript": "^5.2.2",
+		"vitest": "^0.34.6"
 	}
 }
