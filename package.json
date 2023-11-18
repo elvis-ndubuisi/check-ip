@@ -1,0 +1,12 @@
+{
+  "name": "check-ip",
+  "version": "1.0.0",
+  "description": "Check-IP is a powerful IP address validation utility package for JavaScript and TypeScript, inspired by the robust functionalities of 'node-ip' and 'valid-ip.' This package excels in providing an easy-to-use, yet comprehensive, solution for validating IP addresses in various contexts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
