@@ -40,7 +40,6 @@ const version = () => {};
  * @param offset {number} - The offset in the Buffer to start writing.
  * @returns The Buffer representation of the IP address.
  * @throws {Error} If the provided IP address is invalid.
- *
  */
 export const toBuffer = (ip: string, buffer?: Buffer, offset: number = 0): Buffer => {
 	offset = Math.floor(offset);
