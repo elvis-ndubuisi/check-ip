@@ -88,47 +88,35 @@ export const toBuffer = (ip: string, buffer?: Buffer, offset: number = 0): Buffe
  * console.log(ipv6String); // Output: '0000:0000:0000:0000:0000:0000:0000:0001'
  */
 const toString = (buffer: Buffer, offset: number, length?: number): string => {
-	offset = Math.floor(offset);
-	length = length || buffer.length - offset;
+	offset = Math.floor(offset); // Ensure offset is an integer
+  length = length || (buffer.length - offset);
 
-	if (buffer.length < offset + length) {
-		throw new Error('Invalid offset and length combination, exceeds buffer size.');
-	}
+  let result = "";
 
-	const portion = buffer.subarray(offset, offset + length); // Extract portion of the buffer
+  if (length === 4) {
+    // IPv4
+    for (let i = 0; i < length; i++) {
+      result += buffer.readUInt8(offset + i).toString(); // Read each byte as a number
+      if (i < length - 1) {
+        result += ".";
+      }
+    }
+  } else if (length === 16) {
+    // IPv6
+    for (let i = 0; i < length; i += 2) {
+      const part = buffer.readUInt16BE(offset + i).toString(16).padStart(4, '0'); // Pad with leading zeros
+      result += part;
+      if (i < length - 2) {
+        result += ":";
+      }
+    }
+    result = result.replace(/(^|:)0(:0)*:0(:|$)/g, '$1::$3'); // Compress zero runs
+    result = result.replace(/:{3,4}/g, '::'); // Compress consecutive colons
+  } else {
+    throw new Error(`Invalid length ${length} for IP address conversion`);
+  }
 
-	if (portion.length === 4) {
-	} else if (portion.length === 16) {
-	} else {
-	}
-
-	// let result: string | string[] = [];
-
-	// if (length === 4) {
-	// 	// IPv4
-	// 	// for (let i = 0; i < length; i++) {
-	// 	// result.push(buffer[offset + i].toString());
-	// 	// }
-	// 	// result = result.join('.');
-	// 	result = Array.from(slice).join('.');
-	// } else if (length === 16) {
-	// 	// IPv6
-	// 	for (let i = 0; i < length; i += 2) {
-	// 		result.push(buffer.readUInt16BE(offset + i).toString(16));
-	// 		// if (offset + i + 1 < buffer.length) {
-	// 		// result.push(buffer.readUInt16BE(offset + i).toString(16));
-	// 		// }
-	// 	}
-	// 	result = result.join(':');
-
-	// 	// IPv6 Compression Handling
-	// 	result = result.replace(/(^|(?<=:))0(?=:|$)/g, ''); // Remove leading zeros
-	// 	result = result.replace(/:{2,}/g, '::'); // Replace multiple colons with '::'
-	// } else {
-	// 	throw new Error('Unsupported length for string conversion');
-	// }
-
-	// return result as string;
+  return result;
 };
 
 /**

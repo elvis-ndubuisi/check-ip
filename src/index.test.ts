@@ -1,7 +1,6 @@
 import {describe, it, expect} from 'vitest';
 import nodeIP from '../src';
 import {normalizeFamily} from '../src';
-import {skip} from 'node:test';
 
 // describe('NodeIP library', () => {
 // });
@@ -132,10 +131,33 @@ describe('toString utility function', () => {
 		expect(result).toStrictEqual('192.168.1.1');
 	});
 
+	it('should convert IPv4 buffers with offsets and lengths correctly', () => {
+		const buffer = Buffer.from([0, 0, 192, 168, 0, 1, 0, 0]);
+		const result = nodeIP.toString(buffer, 2, 4);
+		expect(result).toBe('192.168.0.1');
+	});
+
+	it('should convert IPv6 buffer to string', () => {
+		const buffer = Buffer.from('00000000000000000000000000000001', 'hex');
+		const result = nodeIP.toString(buffer, 0);
+		expect(result).toBe('0000:0000:0000:0000:0000:0000:0000:0001');
+	});
+
+	// it('should compress zero runs in IPv6 addresses', () => {
+	//   const buffer = Buffer.from('0000000000000000000000000000000000000000000000000000000000000001', 'hex');
+	//   const result = toString(buffer);
+	//   expect(result).toBe('::1');
+	// });
+
+	// it('should handle invalid lengths', () => {
+	//   const buffer = Buffer.from([192, 168, 0, 1]);
+	//   expect(() => toString(buffer, 0, 3)).toThrowError('Invalid length 3 for IP address conversion');
+	// });
+
 	it('should convert IPv6 buffer to string without compression', () => {
 		const buff = Buffer.from('20010db8000000000000000000001234', 'hex');
 		const result = nodeIP.toString(buff, 0, 16);
-		expect(result).toStrictEqual('2001:db8::1234');
+		expect(result).toEqual('2001:db8::1234');
 	});
 
 	it('should convert IPv6 buffer to string with compression', () => {
@@ -273,7 +295,7 @@ describe.skip('mask utility function', () => {
 	});
 });
 
-describe.skip('cidr utility function', () => {
+describe('cidr utility function', () => {
 	it('should mask address in CIDR notation', () => {
 		expect(nodeIP.cidr('192.168.1.134/26')).toEqual('192.168.1.128');
 		expect(nodeIP.cidr('2607:f0d0:1002:51::4/56')).toEqual('2607:f0d0:1002::');
